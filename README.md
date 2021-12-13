@@ -1,2 +1,2 @@
 # go-store
-go store impl
+The sandbox of go store interface
