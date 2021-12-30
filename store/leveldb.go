@@ -76,3 +76,7 @@ func (l *leveldbStore) Delete(key []byte) error {
 func (l *leveldbStore) Has(key []byte) (bool, error) {
 	return l.db.Has(key, nil)
 }
+
+func (l *leveldbStore) Dir() string {
+	return l.dir
+}

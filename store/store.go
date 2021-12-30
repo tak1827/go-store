@@ -12,4 +12,6 @@ type Store interface {
 	Delete(key []byte) error
 
 	Has(key []byte) (bool, error)
+
+	Dir() string
 }
