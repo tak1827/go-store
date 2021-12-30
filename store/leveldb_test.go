@@ -28,7 +28,7 @@ func TestPutGetHasDelete(t *testing.T) {
 
 	// key not found
 	_, err = store.Get([]byte("not-found"))
-	require.Error(t, err)
+	require.EqualError(t, err, ErrNotFound.Error())
 
 	has, err := store.Has(key)
 	require.NoError(t, err)

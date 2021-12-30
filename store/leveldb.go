@@ -1,6 +1,7 @@
 package store
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/syndtr/goleveldb/leveldb"
@@ -9,7 +10,11 @@ import (
 	"github.com/syndtr/goleveldb/leveldb/storage"
 )
 
-var _ Store = (*leveldbStore)(nil)
+var (
+	_ Store = (*leveldbStore)(nil)
+
+	ErrNotFound = errors.New("not found")
+)
 
 type leveldbStore struct {
 	dir string
@@ -51,6 +56,9 @@ func (l *leveldbStore) Close() error {
 func (l *leveldbStore) Get(key []byte) ([]byte, error) {
 	v, err := l.db.Get(key, nil)
 	if err != nil {
+		if errors.Is(err, leveldb.ErrNotFound) {
+			return nil, ErrNotFound
+		}
 		return nil, fmt.Errorf("faild to get: %w", err)
 	}
 
