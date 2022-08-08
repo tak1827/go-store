@@ -32,6 +32,13 @@ func (s *PrefixStore) Get(key []byte) ([]byte, error) {
 	return s.store.Get(s.prefixed(key))
 }
 
+func (s *PrefixStore) ListAll() ([][]byte, error) {
+	s.Lock()
+	defer s.Unlock()
+
+	return s.store.List(s.prefix)
+}
+
 func (s *PrefixStore) Put(key []byte, value []byte) error {
 	s.Lock()
 	defer s.Unlock()
@@ -44,6 +51,13 @@ func (s *PrefixStore) Delete(key []byte) error {
 	defer s.Unlock()
 
 	return s.store.Delete(s.prefixed(key))
+}
+
+func (s *PrefixStore) DeleteAll() error {
+	s.Lock()
+	defer s.Unlock()
+
+	return s.store.DeleteAll(s.prefix)
 }
 
 func (s *PrefixStore) Has(key []byte) (bool, error) {
