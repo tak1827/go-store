@@ -39,6 +39,13 @@ func (s *PrefixStore) ListAll() ([][]byte, error) {
 	return s.store.List(s.prefix)
 }
 
+func (s *PrefixStore) ListAllKey() ([][]byte, error) {
+	s.Lock()
+	defer s.Unlock()
+
+	return s.store.ListKey(s.prefix)
+}
+
 func (s *PrefixStore) Put(key []byte, value []byte) error {
 	s.Lock()
 	defer s.Unlock()

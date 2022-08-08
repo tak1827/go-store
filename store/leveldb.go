@@ -109,6 +109,34 @@ func (l *leveldbStore) List(prefix []byte) (results [][]byte, err error) {
 	return
 }
 
+func (l *leveldbStore) ListKey(prefix []byte) (results [][]byte, err error) {
+	var ro *opt.ReadOptions
+	iter := l.db.NewIterator(util.BytesPrefix(prefix), ro)
+	defer iter.Release()
+
+	for iter.Next() {
+		var (
+			key    = iter.Key()
+			result = make([]byte, len(key))
+		)
+		copy(result, key)
+
+		results = append(results, result)
+	}
+
+	if err = iter.Error(); err != nil {
+		err = fmt.Errorf("faild to iter: %w", err)
+		return
+	}
+
+	if len(results) == 0 {
+		err = ErrNotFound
+		return
+	}
+
+	return
+}
+
 func (l *leveldbStore) Put(key, value []byte) error {
 	return l.db.Put(key, value, nil)
 }

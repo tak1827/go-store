@@ -73,6 +73,14 @@ func TestListAllDeleteAll(t *testing.T) {
 	})
 	require.EqualValues(t, values, results)
 
+	// list all key
+	results, err = store.ListKey(nil)
+	require.NoError(t, err)
+	sort.Slice(results, func(i, j int) bool {
+		return string(results[i]) < string(results[j])
+	})
+	require.EqualValues(t, keys, results)
+
 	// delete all
 	err = store.DeleteAll(nil)
 	require.NoError(t, err)
